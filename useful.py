@@ -6,20 +6,7 @@ import matplotlib.pyplot as plt
 import os
 os.environ["XDG_SESSION_TYPE"] = "xcb"
 
-def reconstruction(model,set="train",threshold = 0.1):
-    x,y = load_from_file(folder='binary',set=set)
-    reconstructions = model.predict(x)
-    if len(reconstructions.shape) > 2:
-        reconstructions=reconstructions.reshape(reconstructions.shape[:-1])
-    rec_loss = np.mean(np.abs(reconstructions - x),axis=1)
-    y_pred = (rec_loss > threshold).astype(int)
-    print_scores(y.argmax(axis=1),y_pred)
 
-def split_normal(x,y,normal_value):
-    mask_normal = y.argmax(axis=1)==0
-    x_normal = x[mask_normal]
-    x_anomaly = x[np.invert(mask_normal)]
-    return x_normal,x_anomaly
 
 def load_from_file(folder,set="train",categorical=True):
     x = np.loadtxt(f"{folder}/{set}_x.txt")
